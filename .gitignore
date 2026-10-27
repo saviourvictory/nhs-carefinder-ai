@@ -1,0 +1,47 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Local backups
+.lint-backup/
+
+# Frontend dependencies and build output
+node_modules/
+frontend/dist/
+dist/
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Local databases and generated data
+*.sqlite
+*.sqlite3
+*.db
+
+# Backup files
+*.backup
+*.bak
+*.orig
+*~
+
+# Local tooling
+.lint-backup/
+.ruff_cache/
