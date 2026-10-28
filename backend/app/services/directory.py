@@ -6,6 +6,7 @@ import httpx
 from app.config import settings
 from app.schemas import Provider
 from app.services.geo import rank_by_distance
+
 logger = logging.getLogger(__name__)
 
 
