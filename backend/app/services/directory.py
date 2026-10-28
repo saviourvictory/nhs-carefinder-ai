@@ -1,14 +1,10 @@
-from app.config import settings
 import logging
-import re
-
 import httpx
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-from app.config import settings
 from app.schemas import Provider
 from app.services.geo import rank_by_distance
 
