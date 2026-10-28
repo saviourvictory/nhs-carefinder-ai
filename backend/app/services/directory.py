@@ -8,6 +8,26 @@ from app.schemas import Provider
 from app.services.geo import rank_by_distance
 
 DEMO_PROVIDERS = [
+        Provider(
+        name="Demo GP Surgery A (Fictional)",
+        service="GP surgery",
+        address="Example Road, Colchester",
+        postcode="CO1 1AA",
+        phone=None,
+        distance_miles=0.4,
+        source="Synthetic demo fixture",
+        demo=True,
+    ),
+    Provider(
+        name="Demo GP Surgery B (Fictional)",
+        service="GP surgery",
+        address="Sample Street, Colchester",
+        postcode="CO1 2BB",
+        phone=None,
+        distance_miles=0.8,
+        source="Synthetic demo fixture",
+        demo=True,
+    ),
     Provider(
         name="Demo Community Health Centre",
         service="physiotherapy",
@@ -110,16 +130,30 @@ async def search_directory(
     radius_miles: float = 10,
 ) -> list[Provider]:
     if settings.demo_mode or not settings.nhs_api_key:
+        query = service.strip().lower()
+
+        if _is_gp_search(query):
+            matching = [
+                provider
+                for provider in DEMO_PROVIDERS
+                if _is_gp_search(provider.service)
+            ]
+        else:
+            matching = [
+                provider
+                for provider in DEMO_PROVIDERS
+                if query in provider.service.lower()
+                or provider.service.lower() in query
+            ]
+
         matching = [
             provider
-            for provider in DEMO_PROVIDERS
-            if service.lower() in provider.service.lower()
-            or provider.service.lower() in service.lower()
+            for provider in matching
+            if provider.distance_miles <= radius_miles
         ]
         return matching[:limit]
 
     is_gp = _is_gp_search(service)
-
     params = {
         "api-version": "3",
         "search": _postcode_district(postcode) if is_gp else service,
@@ -150,7 +184,6 @@ async def search_directory(
         )
         response.raise_for_status()
         data = response.json()
-
         rows = data.get("value", [])
 
     if is_gp:
@@ -159,11 +192,8 @@ async def search_directory(
 
         for row in rows:
             candidate_postcode = row.get("Postcode") or ""
-
             try:
-                candidate_district = _postcode_district(
-                    candidate_postcode
-                )
+                candidate_district = _postcode_district(candidate_postcode)
             except ValueError:
                 continue
 
@@ -173,6 +203,4 @@ async def search_directory(
         rows = filtered_rows
 
     providers = [_provider(row, service) for row in rows]
-    return await rank_by_distance(
-        providers, postcode, radius_miles
-    )
+    return await rank_by_distance(providers, postcode, radius_miles)
