@@ -1,7 +1,11 @@
-
+import logging
 import re
 
 import httpx
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 from app.config import settings
 from app.schemas import Provider
@@ -123,6 +127,7 @@ def _postcode_district(postcode: str) -> str:
     return normalised[:-3]
 
 
+
 async def search_directory(
     service: str,
     postcode: str,
@@ -182,9 +187,18 @@ async def search_directory(
             params=params,
             headers={"apikey": settings.nhs_api_key},
         )
+
+    try:
         response.raise_for_status()
-        data = response.json()
-        rows = data.get("value", [])
+    except httpx.HTTPStatusError as exc:
+        logger.error(
+            "NHS directory API returned HTTP status %s",
+            exc.response.status_code,
+        )
+        raise
+
+    data = response.json()
+    rows = data.get("value", [])
 
     if is_gp:
         requested_district = _postcode_district(postcode)
