@@ -189,6 +189,7 @@ async def search_directory(
         )
 
     try:
+        logger.info("NHS directory upstream status: %s", response.status_code)  
         response.raise_for_status()
     except httpx.HTTPStatusError as exc:
         logger.error(
