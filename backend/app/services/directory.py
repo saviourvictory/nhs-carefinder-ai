@@ -181,6 +181,7 @@ async def search_directory(
     async with httpx.AsyncClient(
         timeout=httpx.Timeout(8.0, connect=3.0)
     ) as client:
+            logger.info("Attempting NHS directory request; base configured: %s", bool(settings.nhs_api_base))
         response = await client.get(
             settings.nhs_api_base,
             params=params,
