@@ -1,12 +1,12 @@
 import logging
+import re
+
 import httpx
 
 from app.config import settings
-
-logger = logging.getLogger(__name__)
-
 from app.schemas import Provider
 from app.services.geo import rank_by_distance
+logger = logging.getLogger(__name__)
 
 DEMO_PROVIDERS = [
         Provider(
