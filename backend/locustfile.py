@@ -1,4 +1,5 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, between, task
+
 
 class CareFinderUser(HttpUser):
     wait_time = between(1, 3)

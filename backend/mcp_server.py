@@ -1,7 +1,6 @@
 """MCP stdio server: exposes read-only provider search as a tool."""
-import asyncio
-from mcp.server.fastmcp import FastMCP
 from app.services.directory import search_directory
+from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("NHS CareFinder service search")
 

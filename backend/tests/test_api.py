@@ -98,7 +98,49 @@ def test_chest_pain_triggers_emergency_safety_rule():
     assert "chest pain" in data["answer"].lower()
 
 
-def test_gp_registration_response_avoids_unverified_claims():
+def test_gp_registration_response_avoids_unverified_claims(monkeypatch):
+    from app.services import assistant
+
+    async def fake_retrieve_nhs_pages(question):
+        return [
+            {
+                "title": "GP registration",
+                "url": "https://www.nhs.uk/nhs-services/gps/",
+                "text": "Check the official NHS website for GP registration guidance.",
+            }
+        ]
+
+    class FakeResponse:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {
+                "message": {
+                    "content": (
+                        "I can provide general information about GP registration, "
+                        "but I cannot diagnose a condition. Please check the official "
+                        "NHS website for registration guidance."
+                    )
+                }
+            }
+
+    class FakeClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def post(self, *args, **kwargs):
+            return FakeResponse()
+
+    monkeypatch.setattr(assistant, "retrieve_nhs_pages", fake_retrieve_nhs_pages)
+    monkeypatch.setattr(assistant.httpx, "AsyncClient", FakeClient)
+
     r = client.post(
         "/api/chat",
         json={"question": "How do I register with a GP in England?"},
@@ -111,4 +153,3 @@ def test_gp_registration_response_avoids_unverified_claims():
     assert "cannot diagnose" in answer
     assert "nhs.uk" in str(data["sources"]).lower()
     assert "£20-£30" not in answer
-
