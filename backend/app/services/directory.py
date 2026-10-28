@@ -1,3 +1,4 @@
+
 import logging
 import re
 
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 DEMO_PROVIDERS = [
-        Provider(
+    Provider(
         name="Demo GP Surgery A (Fictional)",
         service="GP surgery",
         address="Example Road, Colchester",
@@ -126,7 +127,6 @@ def _postcode_district(postcode: str) -> str:
     return normalised[:-3]
 
 
-
 async def search_directory(
     service: str,
     postcode: str,
@@ -178,7 +178,7 @@ async def search_directory(
     if is_gp:
         params["$filter"] = "OrganisationTypeId eq 'GPB'"
 
-        async with httpx.AsyncClient(
+    async with httpx.AsyncClient(
         timeout=httpx.Timeout(8.0, connect=3.0)
     ) as client:
         logger.info(
@@ -192,7 +192,10 @@ async def search_directory(
         )
 
     try:
-        logger.info("NHS directory upstream status: %s", response.status_code)  
+        logger.info(
+            "NHS directory upstream status: %s",
+            response.status_code,
+        )
         response.raise_for_status()
     except httpx.HTTPStatusError as exc:
         logger.error(
