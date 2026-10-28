@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import './style.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = import.meta.env.VITE_API_URL || 'https://nhs-carefinder-ai.onrender.com';
 function App(){
   const [service,setService]=useState('GP surgery');
   const [postcode,setPostcode]=useState('');
