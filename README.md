@@ -1,5 +1,7 @@
 # NHS CareFinder AI — runnable MVP
 
+🚀 **[Open Live Demo](https://nhs-carefinder-ai-web.onrender.com/)**
+
 Patient-facing NHS service navigation demo. It is **not a diagnostic or booking product** and it does not indicate provider capacity.
 
 ## Includes
@@ -34,4 +36,4 @@ If the chatbot cannot connect to Ollama, check `docker compose ps` and `docker c
 ## Production caveats
 The NHS API adapter is a useful integration starting point but the returned fields and query filters must be validated against your API key's official OpenAPI contract and sandbox. Distance sorting requires reliable geocodes; the directory's geospatial fields may be absent. Do not scrape NHS pages or infer appointment availability. Real appointment/referral integrations need separate onboarding and approvals.
 
-Before public clinical deployment, determine medical-device status and clinical safety obligations; perform a DPIA, NHS assurance, DCB0129/0160 assessment where applicable, penetration testing, accessibility checks, and clinical content review. Do not send symptoms or identifiable health data to an unapproved LLM. Emergency: 999 for life-threatening emergencies; NHS 111 for urgent advice.
+Before public clinical deployment, determine medical-device status and clinical safety obligations; perform a DPIA, NHS assurance, DCB0129/0160 assessment where applicable, penetration testing, accessibility checks, and clinical content review. Do not send symptoms or identifiable health data to an unapproved LLM. Emergency: 999 for life-threatening emergencies; NHS 111 for urgent advice in England.
