@@ -19,9 +19,9 @@ Patient-facing NHS service navigation demo. It is **not a diagnostic or booking 
 cp .env.example .env
 docker compose up --build
 ```
-Frontend: http://localhost:5173  
-API docs: http://localhost:8000/docs  
-API health: http://localhost:8000/health
+Live website: https://nhs-carefinder-ai-web.onrender.com/
+Backend health: https://nhs-carefinder-ai.onrender.com/health
+API documentation: https://nhs-carefinder-ai.onrender.com/docs
 
 Without `NHS_API_KEY`, API uses clearly labeled synthetic demo fixtures. Obtain an API subscription key and review the official v3 contract before enabling live mode. The NHS DoHS API v3 is active; v1/v2 were scheduled for retirement on 2 February 2026. References:
 - https://digital.nhs.uk/developer/api-catalogue/directory-of-healthcare-services
